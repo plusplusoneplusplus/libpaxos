@@ -33,8 +33,8 @@
 
 static void msgpack_pack_string(msgpack_packer* p, char* buffer, int len)
 {
-	msgpack_pack_raw(p, len);
-	msgpack_pack_raw_body(p, buffer, len);
+	msgpack_pack_ext(p, len, 0);
+	msgpack_pack_ext_body(p, buffer, len);
 }
 
 static void msgpack_unpack_uint32_at(msgpack_object* o, uint32_t* v, int* i)
@@ -46,10 +46,10 @@ static void msgpack_unpack_uint32_at(msgpack_object* o, uint32_t* v, int* i)
 static void msgpack_unpack_string_at(msgpack_object* o, char** buffer, int* len, int* i)
 {
 	*buffer = NULL;
-	*len = MSGPACK_OBJECT_AT(o,*i).raw.size;
+	*len = MSGPACK_OBJECT_AT(o,*i).str.size;
 	if (*len > 0) {
 		*buffer = malloc(*len);
-		memcpy(*buffer, MSGPACK_OBJECT_AT(o,*i).raw.ptr, *len);
+		memcpy(*buffer, MSGPACK_OBJECT_AT(o,*i).str.ptr, *len);
 	}
 	(*i)++;
 }
